@@ -1,0 +1,118 @@
+{
+	"MasterStock": [
+		{
+			"stockCode": "G001",
+			"name": "Gamis 001",
+			"category": "Gamis",
+			"stockGroup": "True",
+			"totalQty": "10",
+			"mastQtyCode": "QG001"
+		},
+		{
+			"stockCode": "C001",
+			"name": "Celana 001",
+			"category": "Celana",
+			"stockGroup": "True",
+			"totalQty": "10",
+			"mastQtyCode": "QC001"
+		}
+	],
+	"Category": [
+		{
+			"categoryName": "Gamis"
+		},
+		{
+			"categoryName": "Celana"
+		},
+		{
+			"categoryName": "Baju"
+		},
+		{
+			"categoryName": "Legging"
+		}
+	],
+	"StockQty": [
+		{
+			"id": "1",
+			"stockCode": "G0001",
+			"totalQty": "10",
+			"colorInfo": "Merah, Biru, Hitam",
+			"Detail_Qty": [
+				{
+					"stockQtyId": "1",
+					"stockCode": "G0001",
+					"color": "Merah",
+					"qty": "3"
+				},
+				{
+					"stockQtyId": "1",
+					"stockCode": "G0001",
+					"color": "Biru",
+					"qty": "3"
+				},
+				{
+					"stockQtyId": "1",
+					"stockCode": "G0001",
+					"color": "Hitam",
+					"qty": "4"
+				}
+			]
+		},
+		{
+			"id": "2",
+			"stockCode": "C0001",
+			"totalQty": "10",
+			"colorInfo": "Merah, Biru, Hitam",
+			"Detail_Qty": [
+				{
+					"stockQtyId": "2",
+					"stockCode": "C0001",
+					"color": "Merah",
+					"qty": "3"
+				},
+				{
+					"stockQtyId": "2",
+					"stockCode": "C0001",
+					"color": "Biru",
+					"qty": "3"
+				},
+				{
+					"stockQtyId": "2",
+					"stockCode": "C0001",
+					"color": "Hitam",
+					"qty": "4"
+				}
+			]
+		}
+	],
+	"Group": [
+		{
+			"stockCode": "G001",
+			"stockName": "Gamis 001",
+			"Sub_List": [
+				{
+					"hStockCode": "G001",
+					"subStockCode": "G011"
+				},
+				{
+					"hStockCode": "G001",
+					"subStockCode": "G012"
+				}
+			]
+		},
+		{
+			"stockCode": "C001",
+			"stockName": "Celana 001",
+			"Sub_List": [
+				{
+					"hStockCode": "C001",
+					"subStockCode": "C011"
+				},
+				{
+					"hStockCode": "C001",
+					"subStockCode": "C012"
+				}
+			]
+		}
+	]
+}
