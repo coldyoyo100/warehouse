@@ -1,11 +1,21 @@
 package com.example.warehouse.service;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +28,7 @@ import com.example.warehouse.dto.MCategoryDTO;
 import com.example.warehouse.dto.MStockDTO;
 import com.example.warehouse.dto.MStockQtyDTO;
 import com.example.warehouse.dto.SubGroupDTO;
+import com.example.warehouse.enums.StockExcelEnum;
 import com.example.warehouse.model.DetailStockQty;
 import com.example.warehouse.model.HeadGroup;
 import com.example.warehouse.model.MCategory;
@@ -81,45 +92,62 @@ public class WarehouseService {
 		}else {
 			for(Entry<String, Object> map : objList.entrySet()) {
 				String key = map.getKey();
+				Object obj = map.getValue();
 				if(key.equals("MStock")){
-					MStock stock = new MStock();
-					MStockDTO dto = (MStockDTO) map.getValue();
+					MStock stock;
+					List<MStockDTO> listDto = (List<MStockDTO>) obj;
 					
-					stock.setId(dto.getId() );
-					stock.setName(dto.getName());
-					stock.setStockCode(dto.getStockCode());
-					stock.setStockGroup(dto.getStockGroup());
-					stock.setTotalQty(Integer.valueOf(dto.getTotalQty()));
-					stock.setMastQtyCode(dto.getMastQtyCode());
-					
-					stockRepo.save(stock);
+					for(MStockDTO dto : listDto) {
+						stock = new MStock();
+						
+						stock.setId(dto.getId() );
+						stock.setName(dto.getName());
+						stock.setStockCode(dto.getStockCode());
+						stock.setStockGroup(dto.getStockGroup());
+						stock.setTotalQty(Integer.valueOf(dto.getTotalQty()));
+						stock.setMastQtyCode(dto.getMastQtyCode());
+						
+						stockRepo.save(stock);
+					 }
 				}else if(key.equals("Category")) {
-					MCategory category = new MCategory();
-					MCategoryDTO dto = (MCategoryDTO) map.getValue();
+					MCategory category;
+					List<MCategoryDTO> listDto = (List<MCategoryDTO>) obj;
 					
-					category.setId(dto.getId());
-					category.setCategoryName(dto.getCategoryName());
-					
-					categoryRepo.save(category);
+					for(MCategoryDTO dto : listDto) {
+						category = new MCategory();
+						category.setId(dto.getId());
+						category.setCategoryName(dto.getCategoryName());
+						
+						categoryRepo.save(category);
+					}
 				}else if(key.equals("HeadGroup")) {
-					HeadGroup headGroup = new HeadGroup(); 
-					HeadGroupDTO dto = (HeadGroupDTO) map.getValue();
-					//dto.getId();
-					headGroup.setStockCode(dto.getStockCode());
-					headGroup.setStockName(dto.getStockName());
+					HeadGroup headGroup;
+					List<HeadGroupDTO> listDto = (List<HeadGroupDTO>) obj;
 					
-					groupRepo.save(headGroup);
-					insertSubGroup(dto.getSubList());
+					for(HeadGroupDTO dto : listDto) {
+						headGroup = new HeadGroup();
+						headGroup.setId(dto.getId());
+						headGroup.setStockCode(dto.getStockCode());
+						headGroup.setStockName(dto.getStockName());
+						
+						groupRepo.save(headGroup);
+						insertSubGroup(dto.getSubList());
+					}
 				}else if(key.equals("MStockQty")) {
-					MStockQty stockQty = new MStockQty();
-					MStockQtyDTO dto = (MStockQtyDTO) map.getValue();
-					//dto.getId();
-					stockQty.setStockCode(dto.getStockCode());
-					stockQty.setTotalQty(dto.getTotalQty());
-					stockQty.setColorInfo(dto.getColorInfo());
+					MStockQty stockQty;
+					List<MStockQtyDTO> listDto = (List<MStockQtyDTO>) obj;
 					
-					stockQtyRepo.save(stockQty);
-					insertDetailQty( dto.getDetailQty());
+					for(MStockQtyDTO dto : listDto) {
+						stockQty = new MStockQty();
+						stockQty.setId(dto.getId());
+						stockQty.setStockCode(dto.getStockCode());
+						stockQty.setTotalQty(dto.getTotalQty());
+						stockQty.setColorInfo(dto.getColorInfo());
+						stockQty.setDetStockCode(dto.getDetStockCode());
+						
+						stockQtyRepo.save(stockQty);
+						insertDetailQty( dto.getDetailQty());
+					}
 				}
 			}
 		}
@@ -147,8 +175,84 @@ public class WarehouseService {
 			detStockQty.setColor(dto.getColor());
 			detailQtyRepo.save(detStockQty);
 		}
+	}
+	
+	
+	public void updateData(Map<String, String> jsonStr) {
 		
-//		repo save
+		Long id = Long.parseLong(jsonStr.get("id"));
+		MStock stock = stockRepo.searchId(id);
+		
+		String name = jsonStr.get("name");
+		int qty = Integer.valueOf(jsonStr.get("totalQty"));
+		stock.setName(name);
+		stock.setTotalQty(qty);
+		
+		stockRepo.save(stock);
+	}
+	
+	public void deleteData(String id) {
+		
+		stockRepo.deleteById(Long.parseLong(id));
+		
+//		stockRepo.save(stock);
+	}
+	
+	public void genereateReport() throws Exception {
+		
+		List<MStock> stockList = stockRepo.getAllStock();
+		
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Stock Info");
+		
+		Font headerFont = workbook.createFont();
+//		headerFont.setBoldweight((short) 2);
+		headerFont.setFontHeightInPoints((short) 14);
+		headerFont.setColor(IndexedColors.RED.getIndex());
+
+		CellStyle headerCellStyle = workbook.createCellStyle();
+		headerCellStyle.setFont(headerFont);
+		
+		//create Header Row
+		Row headerRow = sheet.createRow(0);
+		
+		int columnlength = StockExcelEnum.values().length;
+		StockExcelEnum stockEnum = null;
+		
+		for (int i = 0; i < columnlength; i++) {
+		  Cell cell = headerRow.createCell(i);
+		  
+		  stockEnum = (StockExcelEnum) StockExcelEnum.values()[i];
+				  
+		  cell.setCellValue(stockEnum.getHeaderColumn());
+		  cell.setCellStyle(headerCellStyle);
+		}
+		
+		// Resize all columns to fit the content size
+		for (int i = 0; i < columnlength; i++) {
+		  sheet.autoSizeColumn(i);
+		}
+		
+		// Create Other Rows Value 
+		int index = 1;
+		
+		for (MStock stock : stockList) {
+			int rowCount = 0;
+		  Row row = sheet.createRow(index++);
+		  row.createCell(rowCount++).setCellValue(stock.getStockCode());
+		  row.createCell(rowCount++).setCellValue(stock.getName());
+		  row.createCell(rowCount++).setCellValue(stock.getCategory());
+		  row.createCell(rowCount++).setCellValue(stock.getTotalQty());
+		  row.createCell(rowCount++).setCellValue(stock.getStockGroup());
+		}
+		
+//		ByteArrayOutputStream fileOut = new ByteArrayOutputStream();  //for generate OnTheFLy memory
+		//ubah ke byte, dan attach to email
+		
+		FileOutputStream fileOut = new FileOutputStream("C:\\Users\\J\\Desktop\\testing_excel.xlsx");
+	    		
+		workbook.write(fileOut);
+		fileOut.close();
 	}
 	
 	

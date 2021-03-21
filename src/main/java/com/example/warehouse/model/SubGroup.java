@@ -1,6 +1,6 @@
 package com.example.warehouse.model;
 
-import java.io.Serializable;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +11,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "sub_group")
-public class SubGroup implements Serializable {
+public class SubGroup{
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@Column(name="h_stock_code")

@@ -1,6 +1,7 @@
 {
 	"MasterStock": [
 		{
+			"id": "1",
 			"stockCode": "G001",
 			"name": "Gamis 001",
 			"category": "Gamis",
@@ -9,6 +10,7 @@
 			"mastQtyCode": "QG001"
 		},
 		{
+			"id": "2",
 			"stockCode": "C001",
 			"name": "Celana 001",
 			"category": "Celana",
@@ -19,15 +21,19 @@
 	],
 	"Category": [
 		{
+			"id": "1",
 			"categoryName": "Gamis"
 		},
 		{
+			"id": "2",
 			"categoryName": "Celana"
 		},
 		{
+			"id": "3",
 			"categoryName": "Baju"
 		},
 		{
+			"id": "4",
 			"categoryName": "Legging"
 		}
 	],
@@ -37,6 +43,7 @@
 			"stockCode": "G0001",
 			"totalQty": "10",
 			"colorInfo": "Merah, Biru, Hitam",
+			"detStockCode": "1",
 			"Detail_Qty": [
 				{
 					"stockQtyId": "1",
@@ -63,6 +70,7 @@
 			"stockCode": "C0001",
 			"totalQty": "10",
 			"colorInfo": "Merah, Biru, Hitam",
+			"detStockCode": "2",
 			"Detail_Qty": [
 				{
 					"stockQtyId": "2",
@@ -87,6 +95,7 @@
 	],
 	"Group": [
 		{
+			"id": "1",
 			"stockCode": "G001",
 			"stockName": "Gamis 001",
 			"Sub_List": [
@@ -101,6 +110,7 @@
 			]
 		},
 		{
+			"id": "2",
 			"stockCode": "C001",
 			"stockName": "Celana 001",
 			"Sub_List": [

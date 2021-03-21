@@ -38,20 +38,34 @@ public class WarehouseController {
 	}
 	
 	@PostMapping("/update")
-	public ResponseEntity<?> updateAction (@RequestBody UpdtDelActionContainer updateContainer) throws Exception{
+	public ResponseEntity<?> updateAction (@RequestBody Map<String,String> jsonMap) throws Exception{
 		try {
-			return ResponseEntity.ok("sukses Update");
+			warehouseService.updateData(jsonMap);
+		}catch(Exception e) {
+			return ResponseEntity.ok(e.getMessage());
+		}
+		
+		return ResponseEntity.ok("sukses Update");
+	}
+	
+	@PostMapping("/delete")
+	public ResponseEntity<?> deleteAction (@RequestBody String id) throws Exception{
+		try {
+			warehouseService.deleteData(id);
+			return ResponseEntity.ok("sukses Delete");
 		}catch(Exception e) {
 			return ResponseEntity.ok(e.getMessage());
 		}
 	}
 	
-	@PostMapping("/delete")
-	public ResponseEntity<?> deleteAction (@RequestBody UpdtDelActionContainer deleteContainer) throws Exception{
+	@PostMapping("/reporting")
+	public ResponseEntity<?> generateReport () throws Exception{
 		try {
-			return ResponseEntity.ok("sukses Delete");
+			warehouseService.genereateReport();
 		}catch(Exception e) {
 			return ResponseEntity.ok(e.getMessage());
 		}
+		
+		return ResponseEntity.ok("sukses Generate Report");
 	}
 }

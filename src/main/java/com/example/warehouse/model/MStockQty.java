@@ -1,24 +1,20 @@
 package com.example.warehouse.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.sun.istack.NotNull;
 
 @Entity
 @Table(name="m_stock_qty")
 //@SequenceGenerator(name = "STOCK_QTY_SEQ_ID", allocationSize = 1, sequenceName = "STOCK_QTY_SEQ_ID")
-public class MStockQty implements Serializable {
+public class MStockQty {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name="stock_code")
@@ -30,7 +26,7 @@ public class MStockQty implements Serializable {
 	@Column(name="total_qty")
 	private String totalQty;
 	
-	
+	@Column(name="color_info")
 	private String colorInfo;
 
 	public Long getId() {

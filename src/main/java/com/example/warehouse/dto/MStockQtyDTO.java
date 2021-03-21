@@ -11,6 +11,7 @@ public class MStockQtyDTO {
 	private String stockCode;
 	private String totalQty;
 	private String colorInfo;
+	private String detStockCode;
 	
 	@JsonProperty("Detail_Qty")
 	private List<DetailStockQtyDTO> detailQty = new ArrayList<DetailStockQtyDTO>();
@@ -45,7 +46,11 @@ public class MStockQtyDTO {
 	public void setDetailQty(List<DetailStockQtyDTO> detailQty) {
 		this.detailQty = detailQty;
 	}
-	
-	
+	public String getDetStockCode() {
+		return detStockCode;
+	}
+	public void setDetStockCode(String detStockCode) {
+		this.detStockCode = detStockCode;
+	}
 	
 }
