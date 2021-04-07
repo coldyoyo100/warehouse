@@ -181,10 +181,11 @@ public class WarehouseService {
 	public void updateData(Map<String, String> jsonStr) {
 		
 		Long id = Long.parseLong(jsonStr.get("id"));
-		MStock stock = stockRepo.searchId(id);
+		MStock stock = new MStock(); //= stockRepo.searchId(id);
 		
 		String name = jsonStr.get("name");
 		int qty = Integer.valueOf(jsonStr.get("totalQty"));
+		stock.setId(id);
 		stock.setName(name);
 		stock.setTotalQty(qty);
 		

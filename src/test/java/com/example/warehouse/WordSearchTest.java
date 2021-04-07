@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class WordSearchTest {
 	
-	@Test
+//	@Test
 	public void main() {
 		Scanner userInput = new Scanner(System.in);
 		try {
@@ -381,4 +381,97 @@ public class WordSearchTest {
 		System.out.println(total);
 	}
 	
+	
+	public void fizz() {
+        int i = 0;
+        for (i=1; i<=100; i++) {
+            if (i % 15 == 0) {
+                System.out.printf("FizzBuzz\n");
+            } else if (i % 5 == 0) {
+                System.out.printf("Buzz\n");
+            } else if (i % 3 == 0) {
+                System.out.printf("Fizz\n");
+            } else{
+                System.out.printf("%d\n", i);
+            }
+        }
+    }
+	
+	
+	public int binarySearch(int[] array, int value, int low, int high) {
+        int mid;
+        if (high < low) {
+            return -1;
+        } else {
+            mid = (low + high)/2;
+            if (array[mid] > value) {
+                return binarySearch(array, value, low, mid);
+            } else if (array[mid] < value) {
+                return binarySearch(array, value, mid+1, high);
+            } else {
+                return mid;
+            }
+        }
+    }
+
+
+    public void binariTest() {
+        Scanner sc = new Scanner(System.in);
+        int i, value, answer;
+        int[] array = new int[10000];
+        for (i=0; i<10000; i++) {
+            array[i] = sc.nextInt();
+        }
+        for (i=0; i<10000; i++) {
+            value = sc.nextInt();
+            answer = binarySearch(array, value, 0, 10000);
+            System.out.printf("%d\n", answer);
+        }
+    }
+	
+	
+	static int bitmask;
+    static ArrayList<Character> characters;
+    static ArrayList<Character> running;
+	 
+
+	    public void permutations() {
+	        int i;
+	        if (running.size() == characters.size()) {
+	            StringBuilder s = new StringBuilder();
+	            for (char c : running) {
+	                s.append(c);
+	            }
+	            System.out.printf("%s\n", s.toString());
+	        } else {
+	            for(i=0; i<characters.size(); i++) {
+	            	if ( ((bitmask>>i+1)&1) == 0 ) {
+	                    bitmask |= (1<<i);
+	                    running.add(characters.get(i));
+	                    permutations();
+	                    running.remove(running.size()-1);
+	                }
+	            }
+	        }
+	    }
+
+	    @Test
+	    public void testPermutation() {
+	    	
+	    	
+	        int i;
+	        Scanner sc = new Scanner(System.in);
+	        String s = sc.next();
+	        characters = new ArrayList<Character>();
+	        for (i=0; i<s.length(); i++) {
+	            characters.add(s.charAt(i));
+	        }
+	        running = new ArrayList<Character>();
+	        bitmask = 0;
+	        permutations();
+
+	    }
+	
+	
 }
+
